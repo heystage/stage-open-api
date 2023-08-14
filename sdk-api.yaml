@@ -1,0 +1,1014 @@
+openapi: 3.0.3
+
+info:
+  title: Stage Technologies, Inc. API
+  description: |-
+    Stage Technologies, Inc. API
+    
+    Useful links:
+    - [Stage](https://www.heystage.com/)
+  termsOfService: https://docs.heystage.com/docs/legal/tos
+  contact:
+    name: "Stage Technologies, Inc."
+    url: https://www.heystage.com/
+    email: stage@heystage.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.42
+
+externalDocs:
+  description: Stage documentation
+  url: https://docs.heystage.com
+
+servers:
+  - url: https://api.heystage.com/sdk-api
+  - url: http://localhost:8080/sdk-api
+
+tags:
+  - name: stage   # Generated class name is based on the tag; here, it's StageApi.
+    description: "Stage API"
+    externalDocs:
+      description: "Stage API"
+      url: https://docs.heystage.com/docs
+
+paths:
+  /organizations:
+    post:
+      operationId: createOrganization
+      tags:
+        - stage
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganizationArg'
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+          headers:
+            Location:
+              schema:
+                type: string
+                description: The URL to the newly created organization, which is also returned in the response body.
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/{organizationIdentifier}/users:
+    post:
+      operationId: createOrganizationUser
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrganizationUserArg"
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/User"
+          headers:
+            Location:
+              schema:
+                type: string
+                description: The URL to the newly created organization user, which is also returned in the response body.
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/{organizationIdentifier}/merge:
+    put:
+      operationId: mergeOrganization
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MergeOrganizationArg"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/{organizationIdentifier}:
+    get:
+      operationId: getOrganization
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/{organizationIdentifier}/plans:
+    get:
+      operationId: getOrganizationPlans
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/OrganizationPlans"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/plans:
+    get:
+      operationId: getPlansForOrganizations
+      tags:
+        - stage
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Plans"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users:
+    post:
+      operationId: createUser
+      tags:
+        - stage
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserArg"
+      responses:
+        '201':
+          description: "Created"
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/User"
+          headers:
+            Location:
+              schema:
+                type: string
+                description: The URL to the newly created user, which is also returned in the response body.
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/{userIdentifier}:
+    get:
+      operationId: getUser
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      operationId: updateUser
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+             $ref: "#/components/schemas/UpdateUserArg"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/{userIdentifier}/accesses:
+    get:
+      operationId: hasAccesses
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/FeatureIdentifiersParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Accesses"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/{userIdentifier}/features/{featureIdentifier}/access:
+    get:
+      operationId: hasAccess
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/FeatureIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Access"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      operationId: access
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/FeatureIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Access"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/{userIdentifier}/features/{featureIdentifier}/adjustAccessCount:
+    put:
+      operationId: adjustAccessCount
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/FeatureIdentifierParameter"
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdjustAccessCountArg"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Access"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/{userIdentifier}/features/{featureIdentifier}/resetAccessCount:
+    put:
+      operationId: resetAccessCount
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/FeatureIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Access"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/{userIdentifier}/plans:
+    get:
+      operationId: getUserPlans
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/UserPlans"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/plans:
+    get:
+      operationId: getPlansForUsers
+      tags:
+        - stage
+      security:
+        - StageApiKey: []
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Plans"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /billing/organizations/{organizationIdentifier}/plans/{planIdentifier}/checkoutSessions:
+    post:
+      operationId: createOrganizationCheckoutSession
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+        - $ref: "#/components/parameters/PlanIdentifierParameter"
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutSessionArg"
+      responses:
+        '200':
+          description: "OK"
+          headers:
+            Location:
+              schema:
+                type: string
+                description: The URL to the checkout session for the organization.
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/CheckoutSession"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /billing/users/{userIdentifier}/plans/{planIdentifier}/checkoutSessions:
+    post:
+      operationId: createUserCheckoutSession
+      tags:
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/PlanIdentifierParameter"
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutSessionArg"
+      responses:
+        '200':
+          description: "OK"
+          headers:
+            Location:
+              schema:
+                type: string
+                description: The URL to the checkout session for the user.
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/CheckoutSession"
+        '403':
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+      
+components:
+  schemas:
+    Accesses:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+              $ref: "#/components/schemas/Access"
+    Access:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+          example: "createWidget"
+        hasAccess:
+          type: boolean
+          nullable: false
+          example: false
+        count:
+          type: integer
+          nullable: true
+          format: int32
+          example: 15
+        limit:
+          type: integer
+          nullable: true
+          format: int32
+          example: 15
+        credit:
+          type: integer
+          nullable: true
+          format: int32
+          example: 0
+        reason:
+          type: string
+          nullable: true
+          enum:
+            - EXCEED_LIMIT
+            - FEATURE_IN_DIFFERENT_PLAN
+            - FEATURE_NOT_FOUND
+            - SUBSCRIPTION_EXPIRED
+            - USER_DOES_NOT_EXIST
+            - USER_NOT_SUBSCRIBED_TO_ANY_PLANS
+          example: EXCEED_LIMIT
+      xml:
+        name: access
+    AdjustAccessCountArg:
+      type: object
+      properties:
+        amount:
+          type: integer
+    User:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+          example: "joe@example.com"
+        stripeCustomerId:
+          type: string
+          nullable: true
+        planIdentifier:
+          type: string
+          nullable: true
+          example: "pro"
+        organizationIdentifer:
+          type: string
+          nullable: false
+          example: "jpmc"
+        roleIdentifier:
+          type: string
+          nullable: false
+          example: "admin"
+    CreateUserArg:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+        planIdentifier:
+          type: string
+          nullable: true
+        isOnTrial:
+          description: "This property is applicable only when planIdentifier is not null."
+          type: boolean
+          nullable: true
+    UpdateUserArg:
+      type: object
+      properties:
+        planIdentifier:
+          type: string
+          nullable: true
+        organizationIdentifier:
+          type: string
+          nullable: true
+        roleIdentifier:
+          type: string
+          nullable: true
+        isOnTrial:
+          description: "This property is applicable only when planIdentifier is not null."
+          type: boolean
+          nullable: true
+    CreateOrganizationUserArg:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+        roleIdentifier:
+          type: string
+          nullable: false
+    UserPlans:
+      type: object
+      properties:
+        userIdentifier:
+          type: string
+          nullable: false
+          example: "joe@example.com"
+        planIdentifier:
+          type: string
+          nullable: true
+          example: "pro"
+        isOnTrial:
+          type: boolean
+          nullable: true
+        plans:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/Plan"
+    Plan:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+          example: "pro"
+        name:
+          type: string
+          nullable: false
+          example: "Pro Plan"
+        description:
+          type: string
+          nullable: true
+        stripeProductId:
+          type: string
+          nullable: true
+        monthlyStripePriceId:
+          type: string
+          nullable: true
+        monthlyCurrency:
+          type: string
+          nullable: true
+          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          example: "usd"
+        monthlyUnitAmount:
+          type: number
+          nullable: true
+          format: float
+          description: "Amount in cent"
+          example: 1000
+        monthlyPricingType:
+          type: string
+          nullable: true
+          enum:
+            - one_time
+            - recurring
+          example: recurring
+        yearlyStripePriceId:
+          type: string
+          nullable: true
+        yearlyCurrency:
+          type: string
+          nullable: true
+          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          example: "usd"
+        yearlyUnitAmount:
+          type: number
+          nullable: true
+          format: float
+          description: "Amount in cent"
+          example: 1000
+        yearlyPricingType:
+          type: string
+          nullable: true
+          enum:
+            - one_time
+            - recurring
+          example: recurring
+        draft:
+          type: boolean
+          nullable: false
+        features:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/Feature"
+        isTrialEnabled:
+          type: boolean
+          nullable: false
+      xml:
+        name: plan
+    Feature:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+          example: "createWidget"
+        name:
+          type: string
+          nullable: false
+          example: "Create Widget"
+        description:
+          type: string
+          nullable: true
+        limit:
+          type: integer
+          nullable: true
+          format: int32
+          example: 15
+        limitType:
+          type: string
+          nullable: false
+          enum:
+            - USER
+            - COMPANY_SHARED
+          example: COMPANY_SHARED
+        monthlyCurrency:
+          type: string
+          nullable: true
+          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          example: "usd"
+        monthlyUnitAmount:
+          type: number
+          nullable: true
+          format: float
+          description: "Amount in cent"
+          example: 1000
+        monthlyUsageType:
+          type: string
+          nullable: true
+          enum:
+            - LICENSED
+            - METERED
+          example: METERED
+        yearlyCurrency:
+          type: string
+          nullable: true
+          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          example: "usd"
+        yearlyUnitAmount:
+          type: number
+          nullable: true
+          format: float
+          description: "Amount in cent"
+          example: 1000
+        yearlyUsageType:
+          type: string
+          nullable: true
+          enum:
+            - LICENSED
+            - METERED
+          example: METERED
+      xml:
+        name: feature
+    Organization:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+        name:
+          type: string
+          nullable: false
+        description:
+          type: string
+          nullable: true
+        planIdentifier:
+          type: string
+          nullable: true
+        mergedOrganizationIdentifier:
+          type: string
+          nullable: true
+    OrganizationPlans:
+      type: object
+      properties:
+        organizationIdentifier:
+          type: string
+          nullable: false
+          example: "acme"
+        planIdentifier:
+          type: string
+          nullable: true
+          example: "pro"
+        isOnTrial:
+          type: boolean
+          nullable: true
+        plans:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/Plan"
+    Plans:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Plan"
+    CreateOrganizationArg:
+      type: object
+      properties:
+        identifier:
+          type: string
+          nullable: false
+        name:
+          type: string
+          nullable: false
+        description:
+          type: string
+          nullable: true
+        planIdentifier:
+          type: string
+          nullable: true
+        isOnTrial:
+          description: "This property is applicable only when planIdentifier is not null."
+          type: boolean
+          nullable: true
+    MergeOrganizationArg:
+      type: object
+      properties:
+        destinationOrganizationIdentifier:
+          type: string
+          nullable: false
+        archiveSourceOrganization:
+          type: boolean
+    CheckoutSessionArg:
+      type: object
+      properties:
+        successUrl:
+          type: string
+          nullable: false
+        cancelUrl:
+          type: string
+          nullable: false
+        billingInterval:
+          type: string
+          nullable: false
+          enum:
+            - MONTH
+            - YEAR
+          example: MONTH
+        isOnTrial:
+          type: boolean
+          nullable: true
+        collectPaymentMethodWhenTrialing:
+          type: boolean
+          nullable: true
+        vendorOptions:
+          type: object
+          nullable: true
+          properties:
+            stripeOptions:
+              type: object
+              nullable: true
+              properties:
+                allowDiscountCodes:
+                  type: boolean
+                  nullable: true
+                billingAddressCollection:
+                  type: string
+                  nullable: true
+                  enum:
+                    - AUTO
+                    - REQUIRED
+                metadata:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: string
+                subscriptionData:
+                  type: object
+                  nullable: true
+                  properties:
+                    metadata:
+                      type: object
+                      nullable: true
+                      additionalProperties:
+                        type: string
+    CheckoutSession:
+      type: object
+      properties:
+        url:
+          type: string
+          nullable: false
+    Problem:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          nullable: false
+        type:
+          type: string
+          nullable: true
+          description: URI indicating error type.
+          example: https://docs.heystage.com/docs/problem/forbidden
+        status:
+          type: integer
+          nullable: false
+          description: HTTP status code.
+          example: 403
+        title:
+          type: string
+          nullable: false
+          description: Human-readable error title.
+        detail:
+          type: string
+          nullable: false
+          description: Human-readable error details.
+          example: "User is not allowed to perform this action"
+        errorCode:
+          type: string
+          nullable: false
+          enum:
+            - BAD_REQUEST
+            - FORBIDDEN
+            - FORM_VALIDATION_ERROR
+            - INTERNAL_SERVER_ERROR
+            - NOT_FOUND
+            - UNAUTHORIZED
+          description: Error code describing the error. When it's `FORM_VALIDATION_ERROR`, `fieldErrors` is populated.
+        fieldErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldError"
+      xml:
+        name: problem
+    FieldError:
+      type: object
+      properties:
+        path:
+          type: array
+          nullable: false
+          items:
+            type: string
+          description: The path to the faulty field, for example, `["user", "0", "identifier"]`.
+        detail:
+          type: string
+          nullable: false
+        errorCode:
+          type: string
+          nullable: false
+          enum:
+            - ALREADY_EXISTS
+            - DEFINED
+            - DUPLICATE
+            - INVALID
+            - NOT_DEFINED
+            - NOT_FOUND
+            - PLAN_TRIAL_NOT_ENABLED
+      xml:
+        name: fieldError
+  parameters:
+    OrganizationIdentifierParameter:
+      in: path
+      name: organizationIdentifier
+      required: true
+      schema:
+        type: string
+        description: "Organization identifier"
+    PlanIdentifierParameter:
+      in: path
+      name: planIdentifier
+      required: true
+      schema:
+        type: string
+        description: "Plan identifier"
+    UserIdentifierParameter:
+      in: path
+      name: userIdentifier
+      required: true
+      schema:
+        type: string
+        description: "User identifier"
+        example: "joe@example.com"
+    FeatureIdentifierParameter:
+      in: path
+      name: featureIdentifier
+      required: true
+      schema:
+        type: string
+        description: "Feature identifier"
+        example: "createWidget"
+    FeatureIdentifiersParameter:
+      in: query
+      name: featureIdentifiers
+      required: false
+      schema:
+        type: array
+        default: []
+        minItems: 0
+        maxItems: 10
+        items:
+          type: string
+          example: "createWidget"
+        example: ["createWidget", "viewWidget"]
+  securitySchemes:
+    StageApiKey:
+      type: http
+      scheme: bearer
+      description: "Please enter the API key, excluding the \"Bearer\" portion. This API token can be obtained from Stage."
