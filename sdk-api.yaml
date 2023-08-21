@@ -15,7 +15,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.37
+  version: 0.0.42
 
 externalDocs:
   description: Stage documentation
@@ -58,8 +58,6 @@ paths:
         - stage
       security:
         - StageApiKey: []
-      parameters:
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       requestBody:
         content:
           application/vnd.heystage.v1+json:
@@ -93,7 +91,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -129,7 +126,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -160,7 +156,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -186,7 +181,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -210,8 +204,6 @@ paths:
       tags:
         - Organizations
         - stage
-      parameters:
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -240,8 +232,6 @@ paths:
       tags:
         - Users
         - stage
-      parameters:
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -275,8 +265,6 @@ paths:
       tags:
         - Users
         - stage
-      parameters:
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -307,7 +295,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -332,7 +319,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -364,7 +350,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifiersParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -391,7 +376,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -417,7 +401,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -444,7 +427,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -476,7 +458,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -502,7 +483,6 @@ paths:
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
@@ -529,7 +509,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
         - $ref: "#/components/parameters/PlanIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -566,7 +545,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/PlanIdentifierParameter"
-        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
@@ -1141,15 +1119,6 @@ components:
           description: The checkout session URL to which your application needs to redirect.
           example: https://checkout.stripe.com/c/pay/cs_test_b13GkyjR6B5Y1OSKtHr1Gwcer
   parameters:
-    AcceptHeaderParameter:
-      in: header
-      name: Accept
-      required: false
-      description: This determines the API version. Any requests without the Accept header will default to use the latest version. And, an invalid media type will cause an HTTP 400 error.
-      schema:
-        type: string
-        default: application/vnd.heystage.v1+json
-        example: application/vnd.heystage.v1+json
     OrganizationIdentifierParameter:
       in: path
       name: organizationIdentifier
