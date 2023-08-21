@@ -689,13 +689,6 @@ components:
           type: boolean
           nullable: true
           example: null
-    Plans:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/Plan"
     CreateOrganizationUserArg:
       type: object
       required:
@@ -944,6 +937,13 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Plan"
+    Plans:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Plan"
     CreateOrganizationArg:
       type: object
       properties:
