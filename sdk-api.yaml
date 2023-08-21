@@ -4,7 +4,7 @@ info:
   title: Stage Technologies, Inc. API
   description: |-
     Stage Technologies, Inc. API
-    
+
     Useful links:
     - [Stage](https://www.heystage.com/)
   termsOfService: https://docs.heystage.com/docs/legal/tos
@@ -15,7 +15,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.42
+  version: 0.0.37
 
 externalDocs:
   description: Stage documentation
@@ -26,8 +26,23 @@ servers:
   - url: http://localhost:8080/sdk-api
 
 tags:
-  - name: stage   # Generated class name is based on the tag; here, it's StageApi.
+  - name: stage # Generated class name is based on the tag; here, it's StageApi.
     description: "Stage API"
+    externalDocs:
+      description: "Stage API"
+      url: https://docs.heystage.com/docs
+  - name: Organizations # Generated class name is based on the tag; here, it's StageApi.
+    description: "Organizations"
+    externalDocs:
+      description: "Stage API"
+      url: https://docs.heystage.com/docs
+  - name: Users # Generated class name is based on the tag; here, it's StageApi.
+    description: "Users"
+    externalDocs:
+      description: "Stage API"
+      url: https://docs.heystage.com/docs
+  - name: Billing # Generated class name is based on the tag; here, it's StageApi.
+    description: "Billing"
     externalDocs:
       description: "Stage API"
       url: https://docs.heystage.com/docs
@@ -36,17 +51,22 @@ paths:
   /organizations:
     post:
       operationId: createOrganization
+      summary: Create organization
+      description: Creates a new organization
       tags:
+        - Organizations
         - stage
       security:
         - StageApiKey: []
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
-              $ref: '#/components/schemas/CreateOrganizationArg'
+              $ref: "#/components/schemas/CreateOrganizationArg"
       responses:
-        '201':
+        "201":
           description: "Created"
           content:
             application/vnd.heystage.v1+json:
@@ -57,7 +77,7 @@ paths:
               schema:
                 type: string
                 description: The URL to the newly created organization, which is also returned in the response body.
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -66,19 +86,23 @@ paths:
   /organizations/{organizationIdentifier}/users:
     post:
       operationId: createOrganizationUser
+      summary: Creates organization user
+      description: Creates an organization user.
       tags:
+        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
               $ref: "#/components/schemas/CreateOrganizationUserArg"
       responses:
-        '201':
+        "201":
           description: "Created"
           content:
             application/vnd.heystage.v1+json:
@@ -89,7 +113,7 @@ paths:
               schema:
                 type: string
                 description: The URL to the newly created organization user, which is also returned in the response body.
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -98,25 +122,29 @@ paths:
   /organizations/{organizationIdentifier}/merge:
     put:
       operationId: mergeOrganization
+      summary: Merge organization
+      description: Merges an organization to another, and as a result, migrates all of that organization's users to the new organization.
       tags:
+        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
               $ref: "#/components/schemas/MergeOrganizationArg"
       responses:
-        '200':
+        "200":
           description: "OK"
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Organization"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -125,20 +153,24 @@ paths:
   /organizations/{organizationIdentifier}:
     get:
       operationId: getOrganization
+      summary: Get organization
+      description: Gets an organization
       tags:
+        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: "OK"
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Organization"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -147,20 +179,24 @@ paths:
   /organizations/{organizationIdentifier}/plans:
     get:
       operationId: getOrganizationPlans
+      summary: Get organization plans
+      description: Gets an organization along with plans that are applicable to that organization
       tags:
+        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/OrganizationPlans"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -168,19 +204,29 @@ paths:
                 $ref: "#/components/schemas/Problem"
   /organizations/plans:
     get:
-      operationId: getPlansForOrganizations
+      operationId: listOrganizationPlans
+      summary: List organization plans
+      description: Gets plans for organizations. This is similar to GET /organizations/{organizationIdentifier}/plans, except that this returns organization plans only.
       tags:
+        - Organizations
         - stage
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: "#/components/schemas/Plans"
-        '403':
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OrganizationPlans"
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -189,17 +235,22 @@ paths:
   /users:
     post:
       operationId: createUser
+      summary: Create user
+      description: Creates a user.
       tags:
+        - Users
         - stage
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
               $ref: "#/components/schemas/CreateUserArg"
       responses:
-        '201':
+        "201":
           description: "Created"
           content:
             application/vnd.heystage.v1+json:
@@ -210,7 +261,37 @@ paths:
               schema:
                 type: string
                 description: The URL to the newly created user, which is also returned in the response body.
-        '403':
+        "403":
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /users/plans:
+    get:
+      operationId: listUserPlans
+      summary: List user plans
+      description: Gets plans for users. This is similar to GET /users/{userIdentifier}/plans, except that this returns user plans only.
+      tags:
+        - Users
+        - stage
+      parameters:
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
+      security:
+        - StageApiKey: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Plan"
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -219,20 +300,24 @@ paths:
   /users/{userIdentifier}:
     get:
       operationId: getUser
+      summary: Get user
+      description: Gets a user
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/User"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -240,25 +325,29 @@ paths:
                 $ref: "#/components/schemas/Problem"
     put:
       operationId: updateUser
+      summary: Update a user
+      description: Updates a user
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
-             $ref: "#/components/schemas/UpdateUserArg"
+              $ref: "#/components/schemas/UpdateUserArg"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/User"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -267,21 +356,25 @@ paths:
   /users/{userIdentifier}/accesses:
     get:
       operationId: hasAccesses
+      summary: Check user access
+      description: Checks if a user has access to any features specified via `featureIdentifiers` or any features when `featureIdentifiers` is not specified.
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifiersParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Accesses"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -290,21 +383,25 @@ paths:
   /users/{userIdentifier}/features/{featureIdentifier}/access:
     get:
       operationId: hasAccess
+      summary: Check user access for feature
+      description: Checks if a user has access to the feature identified by `featureIdentifier`.
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Access"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -312,21 +409,25 @@ paths:
                 $ref: "#/components/schemas/Problem"
     post:
       operationId: access
+      summary: Register feature usage
+      description: If a user accesses a feature, use this endpoint to increments its counter by one.
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Access"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -335,26 +436,30 @@ paths:
   /users/{userIdentifier}/features/{featureIdentifier}/adjustAccessCount:
     put:
       operationId: adjustAccessCount
+      summary: Adjusts feature access count
+      description: Adjusts a feature's access count.
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
               $ref: "#/components/schemas/AdjustAccessCountArg"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Access"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -363,21 +468,25 @@ paths:
   /users/{userIdentifier}/features/{featureIdentifier}/resetAccessCount:
     put:
       operationId: resetAccessCount
+      summary: Reset feature access count
+      description: Resets the features access count for the user.
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/Access"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -386,40 +495,24 @@ paths:
   /users/{userIdentifier}/plans:
     get:
       operationId: getUserPlans
+      summary: Get user plans
+      description: Gets a user along with plans that are applicable to that user
       tags:
+        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/vnd.heystage.v1+json:
               schema:
                 $ref: "#/components/schemas/UserPlans"
-        '403':
-          description: "Forbidden"
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-  /users/plans:
-    get:
-      operationId: getPlansForUsers
-      tags:
-        - stage
-      security:
-        - StageApiKey: []
-      responses:
-        '200':
-          description: "OK"
-          content:
-            application/vnd.heystage.v1+json:
-              schema:
-                $ref: "#/components/schemas/Plans"
-        '403':
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -428,21 +521,25 @@ paths:
   /billing/organizations/{organizationIdentifier}/plans/{planIdentifier}/checkoutSessions:
     post:
       operationId: createOrganizationCheckoutSession
+      summary: Create an organization checkout session
+      description: Create an organization checkout session
       tags:
+        - Billing
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
         - $ref: "#/components/parameters/PlanIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
               $ref: "#/components/schemas/CheckoutSessionArg"
       responses:
-        '200':
-          description: "OK"
+        "201":
+          description: "Created"
           headers:
             Location:
               schema:
@@ -451,8 +548,8 @@ paths:
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: "#/components/schemas/CheckoutSession"
-        '403':
+                $ref: "#/components/schemas/RedirectSessionUrl"
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
@@ -461,21 +558,25 @@ paths:
   /billing/users/{userIdentifier}/plans/{planIdentifier}/checkoutSessions:
     post:
       operationId: createUserCheckoutSession
+      summary: Create a user checkout session
+      description: Create a user checkout session
       tags:
+        - Billing
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/PlanIdentifierParameter"
+        - $ref: "#/components/parameters/AcceptHeaderParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/json:
+          application/vnd.heystage.v1+json:
             schema:
               $ref: "#/components/schemas/CheckoutSessionArg"
       responses:
-        '200':
-          description: "OK"
+        "201":
+          description: "Created"
           headers:
             Location:
               schema:
@@ -484,50 +585,56 @@ paths:
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: "#/components/schemas/CheckoutSession"
-        '403':
+                $ref: "#/components/schemas/RedirectSessionUrl"
+        "403":
           description: "Forbidden"
           content:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
-      
 components:
   schemas:
     Accesses:
       type: object
+      description: A list of access objects.
       properties:
         items:
           type: array
           items:
-              $ref: "#/components/schemas/Access"
+            $ref: "#/components/schemas/Access"
     Access:
       type: object
       properties:
         identifier:
+          description: The unique identifier of the feature.
           type: string
           nullable: false
           example: "createWidget"
         hasAccess:
+          description: Whether the user has access to the feature.
           type: boolean
           nullable: false
           example: false
         count:
+          description: Either the user's access count of the feature or the corresponding organization's access count of the feature thus far. This is `null` when featureIdentifier is invalid.
           type: integer
           nullable: true
           format: int32
           example: 15
         limit:
+          description: Either the user's access count limit of the feature or the corresponding organization's access count limit of the feature thus far. This is `null` when featureIdentifier is invalid.
           type: integer
           nullable: true
           format: int32
           example: 15
         credit:
+          description: Either the user's access count credit of the feature or the corresponding organization's access count credit of the feature thus far. This is `null` when featureIdentifier is invalid.
           type: integer
           nullable: true
           format: int32
           example: 0
         reason:
+          description: When hasAccess is false, this provides the reason.
           type: string
           nullable: true
           enum:
@@ -542,83 +649,105 @@ components:
         name: access
     AdjustAccessCountArg:
       type: object
+      description: The amount by which the access count is to be adjusted. This can be a negative or a positive number. When the adjustment causes the count to be less than zero, the count will be set to zero.
       properties:
         amount:
           type: integer
+          example: -1
     User:
       type: object
       properties:
         identifier:
+          description: The unique identifier of the user.
           type: string
           nullable: false
           example: "joe@example.com"
         stripeCustomerId:
+          description: Stripe customer ID of this user. For this end-point, stripeCustomerId is always `null`.
           type: string
           nullable: true
         planIdentifier:
+          description: The plan identifier that the organization to which the user belongs is subscribed to or `null` if the organization is not subscribed to any plans.
           type: string
           nullable: true
           example: "pro"
         organizationIdentifer:
+          description: The organization identifier to which this user belongs.
           type: string
           nullable: false
           example: "jpmc"
         roleIdentifier:
+          description: The role identifier of the plan to which the user's organization is subscribed to.
           type: string
           nullable: false
           example: "admin"
     CreateUserArg:
       type: object
+      required:
+        - identifier
       properties:
         identifier:
+          description: The unique identifier of the user.
           type: string
           nullable: false
         planIdentifier:
+          description: The plan identifier that the user will be subscribed to or `null` if the user is not to be subscribed to any plans.
           type: string
           nullable: true
         isOnTrial:
-          description: "This property is applicable only when planIdentifier is not null."
-          type: boolean
+          description: Set this to `null` when the subscription is a trial one. This is applicable only when planIdentifier is not `null`.
           nullable: true
     UpdateUserArg:
       type: object
       properties:
         planIdentifier:
+          description: The plan identifier that the user will be subscribed to. At least one of `planIdentifier` or `organizationIdentifier` must be specified.
           type: string
           nullable: true
+          example: "pro"
         organizationIdentifier:
+          description: The organization identifier to which this user will belong. At least one of `planIdentifier` or `organizationIdentifier` must be specified.
           type: string
           nullable: true
+          example: null
         roleIdentifier:
+          description: The role identifier of the plan to which the organization identified by `organizationIdentifier` is subscribed to. If this is set to `null` and `organizationIdentifier` is set, the default role will be assigned to the user.
           type: string
           nullable: true
+          example: null
         isOnTrial:
-          description: "This property is applicable only when planIdentifier is not null."
+          description: Set this to `null` when the subscription is a trial one. This is applicable only when planIdentifier is not `null`.
           type: boolean
           nullable: true
+          example: null
     CreateOrganizationUserArg:
       type: object
+      required:
+        - identifier
       properties:
         identifier:
+          description: The unique identifier of the user.
           type: string
           nullable: false
+          example: "joe@example.com"
         roleIdentifier:
+          description: The role identifier of the plan to which the user's organization is subscribed to or `null` to set user's role to the default one.
           type: string
-          nullable: false
+          nullable: true
+          example: "admin"
     UserPlans:
       type: object
       properties:
         userIdentifier:
+          description: The unique identifier of the user.
           type: string
           nullable: false
           example: "joe@example.com"
         planIdentifier:
+          description: The plan identifier that the user is be subscribed to or null if the user is not subscribed to any plans.
           type: string
           nullable: true
           example: "pro"
-        isOnTrial:
-          type: boolean
-          nullable: true
         plans:
           type: object
           properties:
@@ -630,34 +759,40 @@ components:
       type: object
       properties:
         identifier:
+          description: The unique identifier of this plan.
           type: string
           nullable: false
           example: "pro"
         name:
+          description: Plan's name.
           type: string
           nullable: false
           example: "Pro Plan"
         description:
+          description: Plan's description.
           type: string
           nullable: true
         stripeProductId:
+          description: When applicable, the Stripe's product ID of this plan.
           type: string
           nullable: true
         monthlyStripePriceId:
+          description: When applicable, the Stripe's price ID of this plan. A plan (and thus a Stripe's product) can have multiple Stripe prices, and this is the ID of the first price.
           type: string
           nullable: true
         monthlyCurrency:
           type: string
           nullable: true
-          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          description: Lower case of ISO [4217](https://www.iso.org/iso-4217-currency-codes.html)
           example: "usd"
         monthlyUnitAmount:
           type: number
           nullable: true
           format: float
-          description: "Amount in cent"
+          description: When applicable, price's unit amount in cents.
           example: 1000
         monthlyPricingType:
+          description: When applicable, price's type, which is either `one_time` or `recurring`
           type: string
           nullable: true
           enum:
@@ -665,20 +800,22 @@ components:
             - recurring
           example: recurring
         yearlyStripePriceId:
+          description: When applicable, the Stripe's price ID of this plan. A plan (and thus a Stripe's product) can have multiple Stripe prices, and this is the ID of the first price.
           type: string
           nullable: true
         yearlyCurrency:
           type: string
           nullable: true
-          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          description: Lower case of ISO [4217](https://www.iso.org/iso-4217-currency-codes.html)
           example: "usd"
         yearlyUnitAmount:
           type: number
           nullable: true
           format: float
-          description: "Amount in cent"
+          description: When applicable, price's unit amount in cents.
           example: 1000
         yearlyPricingType:
+          description: When applicable, price's type, which is either `one_time` or `recurring`
           type: string
           nullable: true
           enum:
@@ -686,40 +823,44 @@ components:
             - recurring
           example: recurring
         draft:
+          description: Whether this plan is in draft mode or not.
           type: boolean
           nullable: false
         features:
+          description: A list of feature objects.
           type: object
           properties:
             items:
               type: array
               items:
                 $ref: "#/components/schemas/Feature"
-        isTrialEnabled:
-          type: boolean
-          nullable: false
       xml:
         name: plan
     Feature:
       type: object
       properties:
         identifier:
+          description: The unique identifier of this feature.
           type: string
           nullable: false
           example: "createWidget"
         name:
+          description: Feature's name.
           type: string
           nullable: false
           example: "Create Widget"
         description:
+          description: Feature's description.
           type: string
           nullable: true
         limit:
+          description: The feature's limit or null when there's no limit.
           type: integer
           nullable: true
           format: int32
           example: 15
         limitType:
+          description: The feature's limit type or null when there's no limit. When applicable, the limit type is `USER` or `COMPANY_SHARED`
           type: string
           nullable: false
           enum:
@@ -729,15 +870,16 @@ components:
         monthlyCurrency:
           type: string
           nullable: true
-          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          description: Lower case of ISO [4217](https://www.iso.org/iso-4217-currency-codes.html)
           example: "usd"
         monthlyUnitAmount:
           type: number
           nullable: true
           format: float
-          description: "Amount in cent"
+          description: When applicable, monthly price's unit amount in cents.
           example: 1000
         monthlyUsageType:
+          description: When applicable, monthly usage type, which is either `LICENSED` or `METERED`
           type: string
           nullable: true
           enum:
@@ -747,15 +889,16 @@ components:
         yearlyCurrency:
           type: string
           nullable: true
-          description: "Lower case of ISO 4217: https://www.iso.org/iso-4217-currency-codes.html."
+          description: Lower case of ISO [4217](https://www.iso.org/iso-4217-currency-codes.html)
           example: "usd"
         yearlyUnitAmount:
           type: number
           nullable: true
           format: float
-          description: "Amount in cent"
+          description: When applicable, yearly price's unit amount in cents.
           example: 1000
         yearlyUsageType:
+          description: When applicable, yearly usage type, which is either `LICENSED` or `METERED`
           type: string
           nullable: true
           enum:
@@ -766,87 +909,110 @@ components:
         name: feature
     Organization:
       type: object
+      required:
+        - identifier
+        - name
       properties:
         identifier:
+          description: The unique identifier of the organization.
           type: string
           nullable: false
+          example: "acme"
         name:
+          description: The name of the organization.
           type: string
           nullable: false
+          example: "ACME, Inc."
         description:
+          description: Organization's description.
           type: string
           nullable: true
         planIdentifier:
+          description: The identifier of the plan to which the organization subscribes or `null` if the organization is not subscribed to any plans.
           type: string
           nullable: true
+          example: "pro"
         mergedOrganizationIdentifier:
+          description: The identifier of the organization to which this organization is merged, or `null` if this organization was never merged to any other.
           type: string
           nullable: true
     OrganizationPlans:
       type: object
       properties:
         organizationIdentifier:
+          description: The unique identifier of the organization.
           type: string
           nullable: false
           example: "acme"
         planIdentifier:
+          description: The plan identifier that the organization is be subscribed to or null if the organization is not subscribed to any plans.
           type: string
           nullable: true
           example: "pro"
-        isOnTrial:
-          type: boolean
-          nullable: true
         plans:
+          description: A list of plan objects. See "Plan model" below for more detail.
           type: object
           properties:
             items:
               type: array
               items:
                 $ref: "#/components/schemas/Plan"
-    Plans:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/Plan"
     CreateOrganizationArg:
       type: object
       properties:
         identifier:
+          description: The unique identifier of the organization.
           type: string
           nullable: false
         name:
+          description: The name of the organization.
           type: string
           nullable: false
         description:
+          description: Organization's description.
           type: string
           nullable: true
         planIdentifier:
+          description: The identifier of the plan to which the organization will be subscribed or null if the organization is not to be subscribed to any plans.
           type: string
           nullable: true
         isOnTrial:
-          description: "This property is applicable only when planIdentifier is not null."
+          description: Set this to null when the subscription is a trial one. This is applicable only when planIdentifier is not null.
           type: boolean
           nullable: true
     MergeOrganizationArg:
       type: object
+      required:
+        - destinationOrganizationIdentifier
+        - archiveSourceOrganization
       properties:
         destinationOrganizationIdentifier:
+          description: The unique identifier of the destination organization to which this organization is merged.
           type: string
           nullable: false
+          example: wayne_enterprises
         archiveSourceOrganization:
+          description: Whether this organization should be archived once it has been merged to the destination organization.
           type: boolean
     CheckoutSessionArg:
       type: object
+      required:
+        - "successUrl"
+        - "cancelUrl"
+        - "billingInterval"
       properties:
         successUrl:
+          description: Redirect URL upon success.
           type: string
           nullable: false
+          example: "https://example.com/success"
         cancelUrl:
+          description: Redirect URL upon cancelation.
           type: string
           nullable: false
+          example: "https://example.com/cancel"
         billingInterval:
+          description: Billing interval.
           type: string
           nullable: false
           enum:
@@ -854,48 +1020,15 @@ components:
             - YEAR
           example: MONTH
         isOnTrial:
-          type: boolean
+          description: Set this to `true` when the checkoutsession is for a trial subscription.
           nullable: true
+          type: boolean
         collectPaymentMethodWhenTrialing:
+          description: Set this to `true` when payment method is to be collected when the checkout session is for a trial subscription. This is applicable only when `isOnTrial` is set to `true`.
+          nullable: true
           type: boolean
-          nullable: true
         vendorOptions:
-          type: object
-          nullable: true
-          properties:
-            stripeOptions:
-              type: object
-              nullable: true
-              properties:
-                allowDiscountCodes:
-                  type: boolean
-                  nullable: true
-                billingAddressCollection:
-                  type: string
-                  nullable: true
-                  enum:
-                    - AUTO
-                    - REQUIRED
-                metadata:
-                  type: object
-                  nullable: true
-                  additionalProperties:
-                    type: string
-                subscriptionData:
-                  type: object
-                  nullable: true
-                  properties:
-                    metadata:
-                      type: object
-                      nullable: true
-                      additionalProperties:
-                        type: string
-    CheckoutSession:
-      type: object
-      properties:
-        url:
-          type: string
-          nullable: false
+          $ref: "#/components/schemas/VendorOptions"
     Problem:
       type: object
       properties:
@@ -960,41 +1093,96 @@ components:
             - INVALID
             - NOT_DEFINED
             - NOT_FOUND
-            - PLAN_TRIAL_NOT_ENABLED
       xml:
         name: fieldError
+    VendorOptions:
+      description: Additional options for specific billing vendors. See "VendorOptions model" for more detail.
+      type: object
+      nullable: true
+      properties:
+        stripeOptions:
+          description: Options for stripe checkout sessions. See the [Stripe API documentation](https://stripe.com/docs/api/checkout/sessions) for detailed information.
+          type: object
+          nullable: true
+          properties:
+            allowDiscountCodes:
+              description: Allow discount codes to applied at checkout
+              type: boolean
+              nullable: true
+            billingAddressCollection:
+              description: Selects whether to require billing address to be collected at checkout only when required (AUTO) or always (REQUIRED)
+              type: string
+              nullable: true
+              enum:
+                - AUTO
+                - REQUIRED
+            metadata:
+              description: Attaches user-defined metadata to the checkout session object
+              type: object
+              nullable: true
+              additionalProperties:
+                type: string
+            subscriptionData:
+              description: Options for the subscription object
+              type: object
+              nullable: true
+              properties:
+                metadata:
+                  description: Attaches user-defined metadata to the subscription object
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: string
+    RedirectSessionUrl:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The checkout session URL to which your application needs to redirect.
+          example: https://checkout.stripe.com/c/pay/cs_test_b13GkyjR6B5Y1OSKtHr1Gwcer
   parameters:
+    AcceptHeaderParameter:
+      in: header
+      name: Accept
+      required: false
+      description: This determines the API version. Any requests without the Accept header will default to use the latest version. And, an invalid media type will cause an HTTP 400 error.
+      schema:
+        type: string
+        default: application/vnd.heystage.v1+json
+        example: application/vnd.heystage.v1+json
     OrganizationIdentifierParameter:
       in: path
       name: organizationIdentifier
       required: true
+      description: The unique identifier of the organization.
       schema:
         type: string
-        description: "Organization identifier"
+      example: "acme"
     PlanIdentifierParameter:
       in: path
       name: planIdentifier
       required: true
+      description: "Plan identifier"
       schema:
         type: string
-        description: "Plan identifier"
     UserIdentifierParameter:
       in: path
       name: userIdentifier
       required: true
+      description: The unique identifier of the user. Please see [creating users in Stage](https://docs.heystage.com/docs/customer/users#creating-users-in-stage) for more information.
       schema:
         type: string
-        description: "User identifier"
         example: "joe@example.com"
     FeatureIdentifierParameter:
       in: path
       name: featureIdentifier
       required: true
+      description: "Feature identifier"
       schema:
         type: string
-        description: "Feature identifier"
         example: "createWidget"
     FeatureIdentifiersParameter:
+      description: The list of feature identifiers.
       in: query
       name: featureIdentifiers
       required: false
@@ -1011,4 +1199,4 @@ components:
     StageApiKey:
       type: http
       scheme: bearer
-      description: "Please enter the API key, excluding the \"Bearer\" portion. This API token can be obtained from Stage."
+      description: 'Please enter the API key, excluding the "Bearer" portion. This API token can be obtained from Stage.'
