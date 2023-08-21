@@ -481,7 +481,7 @@ paths:
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: "#/components/schemas/Plan"
+                $ref: "#/components/schemas/Plans"
         "403":
           description: "Forbidden"
           content:
