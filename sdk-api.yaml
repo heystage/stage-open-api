@@ -198,7 +198,7 @@ paths:
                 $ref: "#/components/schemas/Problem"
   /organizations/plans:
     get:
-      operationId: listOrganizationPlans
+      operationId: getPlansForOrganizations
       summary: List organization plans
       description: Gets plans for organizations. This is similar to GET /organizations/{organizationIdentifier}/plans, except that this returns organization plans only.
       tags:
@@ -212,12 +212,7 @@ paths:
           content:
             application/vnd.heystage.v1+json:
               schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/OrganizationPlans"
+                $ref: "#/components/schemas/Plans"
         "403":
           description: "Forbidden"
           content:
@@ -251,34 +246,6 @@ paths:
               schema:
                 type: string
                 description: The URL to the newly created user, which is also returned in the response body.
-        "403":
-          description: "Forbidden"
-          content:
-            application/problem+json:
-              schema:
-                $ref: "#/components/schemas/Problem"
-  /users/plans:
-    get:
-      operationId: listUserPlans
-      summary: List user plans
-      description: Gets plans for users. This is similar to GET /users/{userIdentifier}/plans, except that this returns user plans only.
-      tags:
-        - Users
-        - stage
-      security:
-        - StageApiKey: []
-      responses:
-        "200":
-          description: OK
-          content:
-            application/vnd.heystage.v1+json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Plan"
         "403":
           description: "Forbidden"
           content:
@@ -498,6 +465,29 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+  /users/plans:
+    get:
+      operationId: getPlansForUsers
+      summary: List user plans
+      description: Gets plans for users. This is similar to GET /users/{userIdentifier}/plans, except that this returns user plans only.
+      tags:
+        - Users
+        - stage
+      security:
+        - StageApiKey: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: "#/components/schemas/Plan"
+        "403":
+          description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
   /billing/organizations/{organizationIdentifier}/plans/{planIdentifier}/checkoutSessions:
     post:
       operationId: createOrganizationCheckoutSession
@@ -698,6 +688,13 @@ components:
           type: boolean
           nullable: true
           example: null
+    Plans:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Plan"
     CreateOrganizationUserArg:
       type: object
       required:
