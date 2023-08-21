@@ -507,8 +507,8 @@ paths:
             schema:
               $ref: "#/components/schemas/CheckoutSessionArg"
       responses:
-        "201":
-          description: "Created"
+        "200":
+          description: "Ok"
           headers:
             Location:
               schema:
@@ -517,7 +517,7 @@ paths:
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: "#/components/schemas/RedirectSessionUrl"
+                $ref: "#/components/schemas/CheckoutSession"
         "403":
           description: "Forbidden"
           content:
@@ -553,7 +553,7 @@ paths:
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: "#/components/schemas/RedirectSessionUrl"
+                $ref: "#/components/schemas/CheckoutSession"
         "403":
           description: "Forbidden"
           content:
@@ -664,6 +664,7 @@ components:
           nullable: true
         isOnTrial:
           description: Set this to `null` when the subscription is a trial one. This is applicable only when planIdentifier is not `null`.
+          type: boolean
           nullable: true
     UpdateUserArg:
       type: object
@@ -723,6 +724,10 @@ components:
           type: string
           nullable: true
           example: "pro"
+        isOnTrial:
+          description: Set this to null when the subscription is a trial one. This is applicable only when planIdentifier is not null.
+          type: boolean
+          nullable: true
         plans:
           type: object
           properties:
@@ -809,6 +814,9 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Feature"
+        isTrialEnabled:
+          type: boolean
+          nullable: false
       xml:
         name: plan
     Feature:
@@ -924,6 +932,10 @@ components:
           type: string
           nullable: true
           example: "pro"
+        isOnTrial:
+          description: Set this to `true` when the checkoutsession is for a trial subscription.
+          type: boolean
+          nullable: true
         plans:
           description: A list of plan objects. See "Plan model" below for more detail.
           type: object
@@ -995,15 +1007,21 @@ components:
             - YEAR
           example: MONTH
         isOnTrial:
+          type: boolean
           description: Set this to `true` when the checkoutsession is for a trial subscription.
           nullable: true
-          type: boolean
         collectPaymentMethodWhenTrialing:
           description: Set this to `true` when payment method is to be collected when the checkout session is for a trial subscription. This is applicable only when `isOnTrial` is set to `true`.
           nullable: true
           type: boolean
         vendorOptions:
           $ref: "#/components/schemas/VendorOptions"
+    CheckoutSession:
+      type: object
+      properties:
+        url:
+          type: string
+          nullable: false
     Problem:
       type: object
       properties:
@@ -1068,6 +1086,7 @@ components:
             - INVALID
             - NOT_DEFINED
             - NOT_FOUND
+            - PLAN_TRIAL_NOT_ENABLED
       xml:
         name: fieldError
     VendorOptions:
@@ -1108,13 +1127,6 @@ components:
                   nullable: true
                   additionalProperties:
                     type: string
-    RedirectSessionUrl:
-      type: object
-      properties:
-        url:
-          type: string
-          description: The checkout session URL to which your application needs to redirect.
-          example: https://checkout.stripe.com/c/pay/cs_test_b13GkyjR6B5Y1OSKtHr1Gwcer
   parameters:
     OrganizationIdentifierParameter:
       in: path
@@ -1165,4 +1177,4 @@ components:
     StageApiKey:
       type: http
       scheme: bearer
-      description: 'Please enter the API key, excluding the "Bearer" portion. This API token can be obtained from Stage.'
+      description: 'Please enter the API key, excluding the \"Bearer\" portion. This API token can be obtained from Stage.'
