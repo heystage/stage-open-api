@@ -31,21 +31,6 @@ tags:
     externalDocs:
       description: "Stage API"
       url: https://docs.heystage.com/docs
-  - name: Organizations # Generated class name is based on the tag; here, it's StageApi.
-    description: "Organizations"
-    externalDocs:
-      description: "Stage API"
-      url: https://docs.heystage.com/docs
-  - name: Users # Generated class name is based on the tag; here, it's StageApi.
-    description: "Users"
-    externalDocs:
-      description: "Stage API"
-      url: https://docs.heystage.com/docs
-  - name: Billing # Generated class name is based on the tag; here, it's StageApi.
-    description: "Billing"
-    externalDocs:
-      description: "Stage API"
-      url: https://docs.heystage.com/docs
 
 paths:
   /organizations:
@@ -54,13 +39,12 @@ paths:
       summary: Create organization
       description: Creates a new organization
       tags:
-        - Organizations
         - stage
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/CreateOrganizationArg"
       responses:
@@ -87,7 +71,6 @@ paths:
       summary: Creates organization user
       description: Creates an organization user.
       tags:
-        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
@@ -95,7 +78,7 @@ paths:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/CreateOrganizationUserArg"
       responses:
@@ -122,7 +105,6 @@ paths:
       summary: Merge organization
       description: Merges an organization to another, and as a result, migrates all of that organization's users to the new organization.
       tags:
-        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
@@ -130,7 +112,7 @@ paths:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/MergeOrganizationArg"
       responses:
@@ -152,7 +134,6 @@ paths:
       summary: Get organization
       description: Gets an organization
       tags:
-        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
@@ -177,7 +158,6 @@ paths:
       summary: Get organization plans
       description: Gets an organization along with plans that are applicable to that organization
       tags:
-        - Organizations
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
@@ -202,7 +182,6 @@ paths:
       summary: List organization plans
       description: Gets plans for organizations. This is similar to GET /organizations/{organizationIdentifier}/plans, except that this returns organization plans only.
       tags:
-        - Organizations
         - stage
       security:
         - StageApiKey: []
@@ -225,13 +204,12 @@ paths:
       summary: Create user
       description: Creates a user.
       tags:
-        - Users
         - stage
       security:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/CreateUserArg"
       responses:
@@ -258,7 +236,6 @@ paths:
       summary: Get user
       description: Gets a user
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -282,7 +259,6 @@ paths:
       summary: Update a user
       description: Updates a user
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -290,7 +266,7 @@ paths:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/UpdateUserArg"
       responses:
@@ -312,7 +288,6 @@ paths:
       summary: Check user access
       description: Checks if a user has access to any features specified via `featureIdentifiers` or any features when `featureIdentifiers` is not specified.
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -338,7 +313,6 @@ paths:
       summary: Check user access for feature
       description: Checks if a user has access to the feature identified by `featureIdentifier`.
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -363,7 +337,6 @@ paths:
       summary: Register feature usage
       description: If a user accesses a feature, use this endpoint to increments its counter by one.
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -389,7 +362,6 @@ paths:
       summary: Adjusts feature access count
       description: Adjusts a feature's access count.
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -398,7 +370,7 @@ paths:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/AdjustAccessCountArg"
       responses:
@@ -420,7 +392,6 @@ paths:
       summary: Reset feature access count
       description: Resets the features access count for the user.
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -446,7 +417,6 @@ paths:
       summary: Get user plans
       description: Gets a user along with plans that are applicable to that user
       tags:
-        - Users
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
@@ -471,7 +441,6 @@ paths:
       summary: List user plans
       description: Gets plans for users. This is similar to GET /users/{userIdentifier}/plans, except that this returns user plans only.
       tags:
-        - Users
         - stage
       security:
         - StageApiKey: []
@@ -494,7 +463,6 @@ paths:
       summary: Create an organization checkout session
       description: Create an organization checkout session
       tags:
-        - Billing
         - stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
@@ -503,7 +471,7 @@ paths:
         - StageApiKey: []
       requestBody:
         content:
-          application/vnd.heystage.v1+json:
+          application/json:
             schema:
               $ref: "#/components/schemas/CheckoutSessionArg"
       responses:
@@ -530,7 +498,6 @@ paths:
       summary: Create a user checkout session
       description: Create a user checkout session
       tags:
-        - Billing
         - stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
