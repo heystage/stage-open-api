@@ -15,7 +15,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.42
+  version: 0.0.43
 
 externalDocs:
   description: Stage documentation
@@ -91,6 +91,33 @@ paths:
                 description: The URL to the newly created organization user, which is also returned in the response body.
         '403':
           description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/{organizationIdentifier}/users/bulk:
+    post:
+      operationId: createOrganizationUsers
+      tags:
+        - stage
+      parameters:
+        - $ref: '#/components/parameters/OrganizationIdentifierParameter'
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganizationUsersArg'
+      responses:
+        '200':
+          description: 'Created'
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '403':
+          description: 'Forbidden'
           content:
             application/problem+json:
               schema:
@@ -216,6 +243,31 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+  /users/bulk:
+    post:
+      operationId: createUsers
+      tags:
+        - stage
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUsersArg'
+      responses:
+        '200':
+          description: 'Created'
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '403':
+          description: 'Forbidden'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /users/{userIdentifier}:
     get:
       operationId: getUser
@@ -567,6 +619,13 @@ components:
           type: string
           nullable: false
           example: "admin"
+    Users:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
     CreateUserArg:
       type: object
       properties:
@@ -580,6 +639,13 @@ components:
           description: "This property is applicable only when planIdentifier is not null."
           type: boolean
           nullable: true
+    CreateUsersArg:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateUserArg'
     UpdateUserArg:
       type: object
       properties:
@@ -605,6 +671,13 @@ components:
         roleIdentifier:
           type: string
           nullable: false
+    CreateOrganizationUsersArg:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrganizationUserArg'
     UserPlans:
       type: object
       properties:
@@ -890,6 +963,25 @@ components:
                       nullable: true
                       additionalProperties:
                         type: string
+        planOverrides:
+          type: object
+          nullable: true
+          properties:
+            featurePrices: # Map<String, BigDecimal> = mapOf(),
+              type: object
+              nullable: true
+              additionalProperties:
+                type: number
+            val featureLimits: # Map<String, Int> = mapOf(),
+              type: object
+              nullable: true
+              additionalProperties:
+                type: integer
+            val sharedFeatureLimits: # Map<String, Int> = mapOf(),
+              type: object
+              nullable: true
+              additionalProperties:
+                type: integer
     CheckoutSession:
       type: object
       properties:
