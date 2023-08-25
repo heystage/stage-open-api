@@ -967,17 +967,17 @@ components:
           type: object
           nullable: true
           properties:
-            featurePrices: # Map<String, BigDecimal> = mapOf(),
+            featurePrices:
               type: object
               nullable: true
               additionalProperties:
                 type: number
-            val featureLimits: # Map<String, Int> = mapOf(),
+            featureLimits:
               type: object
               nullable: true
               additionalProperties:
                 type: integer
-            val sharedFeatureLimits: # Map<String, Int> = mapOf(),
+            sharedFeatureLimits:
               type: object
               nullable: true
               additionalProperties:
