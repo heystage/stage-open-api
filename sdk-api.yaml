@@ -967,21 +967,30 @@ components:
           type: object
           nullable: true
           properties:
+            monthlyPrice:
+              type: number
+              nullable: true
+            annualPrice:
+              type: number
+              nullable: true
             featurePrices:
               type: object
               nullable: true
               additionalProperties:
                 type: number
+                nullable: true
             featureLimits:
               type: object
               nullable: true
               additionalProperties:
                 type: integer
+                nullable: true
             sharedFeatureLimits:
               type: object
               nullable: true
               additionalProperties:
                 type: integer
+                nullable: true
     CheckoutSession:
       type: object
       properties:
