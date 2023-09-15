@@ -15,7 +15,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.42
+  version: 0.0.43
 
 externalDocs:
   description: Stage documentation
@@ -95,6 +95,33 @@ paths:
                 description: The URL to the newly created organization user, which is also returned in the response body.
         "403":
           description: "Forbidden"
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /organizations/{organizationIdentifier}/users/bulk:
+    post:
+      operationId: createOrganizationUsers
+      tags:
+        - stage
+      parameters:
+        - $ref: '#/components/parameters/OrganizationIdentifierParameter'
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganizationUsersArg'
+      responses:
+        '200':
+          description: 'Created'
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '403':
+          description: 'Forbidden'
           content:
             application/problem+json:
               schema:
@@ -230,6 +257,31 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+  /users/bulk:
+    post:
+      operationId: createUsers
+      tags:
+        - stage
+      security:
+        - StageApiKey: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUsersArg'
+      responses:
+        '200':
+          description: 'Created'
+          content:
+            application/vnd.heystage.v1+json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        '403':
+          description: 'Forbidden'
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
   /users/{userIdentifier}:
     get:
       operationId: getUser
@@ -616,6 +668,13 @@ components:
           type: string
           nullable: false
           example: "admin"
+    Users:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
     CreateUserArg:
       type: object
       required:
@@ -633,6 +692,13 @@ components:
           description: Set this to `null` when the subscription is a trial one. This is applicable only when planIdentifier is not `null`.
           type: boolean
           nullable: true
+    CreateUsersArg:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateUserArg'
     UpdateUserArg:
       type: object
       properties:
@@ -671,6 +737,13 @@ components:
           type: string
           nullable: true
           example: "admin"
+    CreateOrganizationUsersArg:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrganizationUserArg'
     UserPlans:
       type: object
       properties:
@@ -982,7 +1055,71 @@ components:
           nullable: true
           type: boolean
         vendorOptions:
-          $ref: "#/components/schemas/VendorOptions"
+          description: Additional options for specific billing vendors. See "VendorOptions model" for more detail.
+          type: object
+          nullable: true
+          properties:
+            stripeOptions:
+              description: Options for stripe checkout sessions. See the [Stripe API documentation](https://stripe.com/docs/api/checkout/sessions) for detailed information.
+              type: object
+              nullable: true
+              properties:
+                allowDiscountCodes:
+                  description: Allow discount codes to applied at checkout
+                  type: boolean
+                  nullable: true
+                billingAddressCollection:
+                  description: Selects whether to require billing address to be collected at checkout only when required (AUTO) or always (REQUIRED)
+                  type: string
+                  nullable: true
+                  enum:
+                    - AUTO
+                    - REQUIRED
+                metadata:
+                  description: Attaches user-defined metadata to the checkout session object
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: string
+                subscriptionData:
+                  description: Options for the subscription object
+                  type: object
+                  nullable: true
+                  properties:
+                    metadata:
+                      description: Attaches user-defined metadata to the subscription object
+                      type: object
+                      nullable: true
+                      additionalProperties:
+                        type: string
+        planOverrides:
+          type: object
+          nullable: true
+          properties:
+            monthlyPrice:
+              type: number
+              nullable: true
+            annualPrice:
+              type: number
+              nullable: true
+            featurePrices:
+              type: object
+              nullable: true
+              additionalProperties:
+                type: number
+                nullable: true
+            featureLimits:
+              type: object
+              nullable: true
+              additionalProperties:
+                type: integer
+                nullable: true
+            sharedFeatureLimits:
+              type: object
+              nullable: true
+              additionalProperties:
+                type: integer
+                nullable: true
     CheckoutSession:
       type: object
       properties:
@@ -1056,44 +1193,6 @@ components:
             - PLAN_TRIAL_NOT_ENABLED
       xml:
         name: fieldError
-    VendorOptions:
-      description: Additional options for specific billing vendors. See "VendorOptions model" for more detail.
-      type: object
-      nullable: true
-      properties:
-        stripeOptions:
-          description: Options for stripe checkout sessions. See the [Stripe API documentation](https://stripe.com/docs/api/checkout/sessions) for detailed information.
-          type: object
-          nullable: true
-          properties:
-            allowDiscountCodes:
-              description: Allow discount codes to applied at checkout
-              type: boolean
-              nullable: true
-            billingAddressCollection:
-              description: Selects whether to require billing address to be collected at checkout only when required (AUTO) or always (REQUIRED)
-              type: string
-              nullable: true
-              enum:
-                - AUTO
-                - REQUIRED
-            metadata:
-              description: Attaches user-defined metadata to the checkout session object
-              type: object
-              nullable: true
-              additionalProperties:
-                type: string
-            subscriptionData:
-              description: Options for the subscription object
-              type: object
-              nullable: true
-              properties:
-                metadata:
-                  description: Attaches user-defined metadata to the subscription object
-                  type: object
-                  nullable: true
-                  additionalProperties:
-                    type: string
   parameters:
     OrganizationIdentifierParameter:
       in: path
