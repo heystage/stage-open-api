@@ -7,7 +7,7 @@ info:
 
     Useful links:
     - [Stage](https://www.heystage.com/)
-  termsOfService: https://docs.heystage.com/docs/legal/tos
+  termsOfService: https://heystage.alphadoc.io/home/terms%20of%20service
   contact:
     name: "Stage Technologies, Inc."
     url: https://www.heystage.com/
@@ -19,18 +19,24 @@ info:
 
 externalDocs:
   description: Stage documentation
-  url: https://docs.heystage.com
+  url: https://heystage.alphadoc.io/
 
 servers:
   - url: https://api.heystage.com/sdk-api
   - url: http://localhost:8080/sdk-api
 
 tags:
-  - name: stage # Generated class name is based on the tag; here, it's StageApi.
+  - name: Organizations # Generated class name is based on the tag; here, it's OrganizationsApi.
+    description: "Our customers' organizations"
+  - name: Users
+    description: "Our customers' users"
+  - name: Billing
+    description: "The checkout session for our customers"
+  - name: Stage
     description: "Stage API"
     externalDocs:
       description: "Stage API"
-      url: https://docs.heystage.com/docs
+      url: https://heystage.alphadoc.io/
 
 paths:
   /organizations:
@@ -39,7 +45,8 @@ paths:
       summary: Create organization
       description: Creates a new organization
       tags:
-        - stage
+        - Organizations
+        - Stage
       security:
         - StageApiKey: []
       requestBody:
@@ -68,10 +75,11 @@ paths:
   /organizations/{organizationIdentifier}/users:
     post:
       operationId: createOrganizationUser
-      summary: Creates organization user
+      summary: Create organization user
       description: Creates an organization user.
       tags:
-        - stage
+        - Organizations
+        - Stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
       security:
@@ -102,26 +110,28 @@ paths:
   /organizations/{organizationIdentifier}/users/bulk:
     post:
       operationId: createOrganizationUsers
+      summary: Creates organization users
       tags:
-        - stage
+        - Organizations
+        - Stage
       parameters:
-        - $ref: '#/components/parameters/OrganizationIdentifierParameter'
+        - $ref: "#/components/parameters/OrganizationIdentifierParameter"
       security:
         - StageApiKey: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateOrganizationUsersArg'
+              $ref: "#/components/schemas/CreateOrganizationUsersArg"
       responses:
-        '200':
-          description: 'Created'
+        "200":
+          description: "Created"
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: '#/components/schemas/Users'
-        '403':
-          description: 'Forbidden'
+                $ref: "#/components/schemas/Users"
+        "403":
+          description: "Forbidden"
           content:
             application/problem+json:
               schema:
@@ -132,7 +142,8 @@ paths:
       summary: Merge organization
       description: Merges an organization to another, and as a result, migrates all of that organization's users to the new organization.
       tags:
-        - stage
+        - Organizations
+        - Stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
       security:
@@ -161,7 +172,8 @@ paths:
       summary: Get organization
       description: Gets an organization
       tags:
-        - stage
+        - Organizations
+        - Stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
       security:
@@ -185,7 +197,8 @@ paths:
       summary: Get organization plans
       description: Gets an organization along with plans that are applicable to that organization
       tags:
-        - stage
+        - Organizations
+        - Stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
       security:
@@ -209,7 +222,8 @@ paths:
       summary: List organization plans
       description: Gets plans for organizations. This is similar to GET /organizations/{organizationIdentifier}/plans, except that this returns organization plans only.
       tags:
-        - stage
+        - Organizations
+        - Stage
       security:
         - StageApiKey: []
       responses:
@@ -231,7 +245,8 @@ paths:
       summary: Create user
       description: Creates a user.
       tags:
-        - stage
+        - Users
+        - Stage
       security:
         - StageApiKey: []
       requestBody:
@@ -259,36 +274,40 @@ paths:
                 $ref: "#/components/schemas/Problem"
   /users/bulk:
     post:
+      summary: Create users
+      description: Creates users.
       operationId: createUsers
       tags:
-        - stage
+        - Users
+        - Stage
       security:
         - StageApiKey: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUsersArg'
+              $ref: "#/components/schemas/CreateUsersArg"
       responses:
-        '200':
-          description: 'Created'
+        "200":
+          description: "Created"
           content:
             application/vnd.heystage.v1+json:
               schema:
-                $ref: '#/components/schemas/Users'
-        '403':
-          description: 'Forbidden'
+                $ref: "#/components/schemas/Users"
+        "403":
+          description: "Forbidden"
           content:
             application/problem+json:
               schema:
-                $ref: '#/components/schemas/Problem'
+                $ref: "#/components/schemas/Problem"
   /users/{userIdentifier}:
     get:
       operationId: getUser
       summary: Get user
       description: Gets a user
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
       security:
@@ -311,7 +330,8 @@ paths:
       summary: Update a user
       description: Updates a user
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
       security:
@@ -340,7 +360,8 @@ paths:
       summary: Check user access
       description: Checks if a user has access to any features specified via `featureIdentifiers` or any features when `featureIdentifiers` is not specified.
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifiersParameter"
@@ -365,7 +386,8 @@ paths:
       summary: Check user access for feature
       description: Checks if a user has access to the feature identified by `featureIdentifier`.
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
@@ -389,7 +411,8 @@ paths:
       summary: Register feature usage
       description: If a user accesses a feature, use this endpoint to increments its counter by one.
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
@@ -414,7 +437,8 @@ paths:
       summary: Adjusts feature access count
       description: Adjusts a feature's access count.
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
@@ -444,7 +468,8 @@ paths:
       summary: Reset feature access count
       description: Resets the features access count for the user.
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/FeatureIdentifierParameter"
@@ -469,7 +494,8 @@ paths:
       summary: Get user plans
       description: Gets a user along with plans that are applicable to that user
       tags:
-        - stage
+        - Users
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
       security:
@@ -493,7 +519,8 @@ paths:
       summary: List user plans
       description: Gets plans for users. This is similar to GET /users/{userIdentifier}/plans, except that this returns user plans only.
       tags:
-        - stage
+        - Users
+        - Stage
       security:
         - StageApiKey: []
       responses:
@@ -512,10 +539,11 @@ paths:
   /billing/organizations/{organizationIdentifier}/plans/{planIdentifier}/checkoutSessions:
     post:
       operationId: createOrganizationCheckoutSession
-      summary: Create an organization checkout session
+      summary: Create org checkout session
       description: Create an organization checkout session
       tags:
-        - stage
+        - Billing
+        - Stage
       parameters:
         - $ref: "#/components/parameters/OrganizationIdentifierParameter"
         - $ref: "#/components/parameters/PlanIdentifierParameter"
@@ -547,10 +575,11 @@ paths:
   /billing/users/{userIdentifier}/plans/{planIdentifier}/checkoutSessions:
     post:
       operationId: createUserCheckoutSession
-      summary: Create a user checkout session
+      summary: Create user checkout session
       description: Create a user checkout session
       tags:
-        - stage
+        - Billing
+        - Stage
       parameters:
         - $ref: "#/components/parameters/UserIdentifierParameter"
         - $ref: "#/components/parameters/PlanIdentifierParameter"
@@ -674,7 +703,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/User'
+            $ref: "#/components/schemas/User"
     CreateUserArg:
       type: object
       required:
@@ -698,7 +727,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/CreateUserArg'
+            $ref: "#/components/schemas/CreateUserArg"
     UpdateUserArg:
       type: object
       properties:
@@ -743,7 +772,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/CreateOrganizationUserArg'
+            $ref: "#/components/schemas/CreateOrganizationUserArg"
     UserPlans:
       type: object
       properties:
