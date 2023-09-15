@@ -26,13 +26,13 @@ servers:
   - url: http://localhost:8080/sdk-api
 
 tags:
-  - name: Organizations
+  - name: Organizations # Generated class name is based on the tag; here, it's OrganizationsApi.
     description: "Our customers' organizations"
   - name: Users
     description: "Our customers' users"
   - name: Billing
     description: "The checkout session for our customers"
-  - name: Stage # Generated class name is based on the tag; here, it's StageApi.
+  - name: Stage
     description: "Stage API"
     externalDocs:
       description: "Stage API"
