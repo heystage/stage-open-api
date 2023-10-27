@@ -963,6 +963,11 @@ components:
                       nullable: true
                       additionalProperties:
                         type: string
+                lineItems:
+                  type: object
+                  nullable: true
+                  additionalProperties:
+                    type: integer
         planOverrides:
           type: object
           nullable: true
