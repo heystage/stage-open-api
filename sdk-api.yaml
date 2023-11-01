@@ -687,7 +687,7 @@ components:
           type: string
           nullable: true
           example: "pro"
-        organizationIdentifer:
+        organizationIdentifier:
           description: The organization identifier to which this user belongs.
           type: string
           nullable: false
